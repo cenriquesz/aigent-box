@@ -1,0 +1,34 @@
+services:
+  claude:
+    build: ./assistant
+    image: claude-assistant:latest
+    stdin_open: true
+    tty: true
+    env_file: .env
+    volumes:
+      # Home completo - persiste .claude, .aws, .kube, .gitconfig, .ssh, .docker...
+      - ./data/home:/home/assistant
+
+      # Directorio de trabajo por defecto dentro del contenedor
+      - ./data/work:/work
+
+      # Personalizaciones del usuario - fuente de verdad commitable en el fork
+      - ./data/user/user-additions.md:/home/assistant/.claude/user-additions.md
+
+      # Credenciales del host (ajusta :ro segun necesites, ~/.aws requiere escritura):
+      # - ~/.ssh:/home/assistant/.ssh:ro
+      # - ~/.aws:/home/assistant/.aws
+      # - ~/.kube:/home/assistant/.kube:ro
+
+      # Tus proyectos del host (descomenta y ajusta la ruta):
+      # - ~/my-projects:/work/projects
+
+      # Docker socket - permite a Claude gestionar contenedores del host
+      - /var/run/docker.sock:/var/run/docker.sock
+
+      # Reenvio del agente SSH (alternativa a montar ~/.ssh):
+      # - ${SSH_AUTH_SOCK}:/ssh-agent
+
+    group_add:
+      - "0"    # GID del grupo root
+      - "1001" # GID del grupo docker en el host

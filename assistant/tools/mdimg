@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+"""
+mdimg - extrae imágenes base64 de un markdown y las guarda como ficheros.
+
+Lee markdown de stdin, escribe markdown limpio a stdout.
+
+Uso:
+  markitdown fichero.docx | mdimg <directorio_imagenes> > fichero.md
+  cat doc_con_b64.md     | mdimg ./imagenes > limpio.md
+
+Argumentos:
+  <directorio_imagenes>   dónde guardar las imágenes extraídas
+                          (se crea si no existe; por defecto: ./doc_images)
+"""
+import sys
+import re
+import base64
+import hashlib
+from pathlib import Path
+
+B64_RE = re.compile(
+    r'!\[([^\]]*)\]\(data:image/([^;,]+)(?:;charset=[^;]+)?;base64,([A-Za-z0-9+/=\s]+)\)'
+)
+
+EXT_MAP = {'jpeg': 'jpg', 'svg+xml': 'svg'}
+
+
+def main():
+    args = [a for a in sys.argv[1:] if a not in ('-h', '--help')]
+    if '-h' in sys.argv or '--help' in sys.argv:
+        print(__doc__)
+        sys.exit(0)
+
+    images_dir = Path(args[0]) if args else Path('doc_images')
+    count = [0]
+
+    def replace(m):
+        alt      = m.group(1)
+        img_type = m.group(2).strip()
+        b64      = re.sub(r'\s', '', m.group(3))
+
+        try:
+            data = base64.b64decode(b64)
+        except Exception:
+            return m.group(0)
+
+        ext  = EXT_MAP.get(img_type, img_type)
+        name = f"img_{count[0]+1:03d}_{hashlib.md5(data).hexdigest()[:8]}.{ext}"
+        images_dir.mkdir(parents=True, exist_ok=True)
+        (images_dir / name).write_bytes(data)
+        count[0] += 1
+        print(f"[mdimg] {images_dir}/{name}", file=sys.stderr)
+        return f"![{alt}]({images_dir}/{name})"
+
+    clean = B64_RE.sub(replace, sys.stdin.read())
+    sys.stdout.write(clean)
+
+    if count[0] == 0:
+        print("[mdimg] sin imágenes base64 en el documento", file=sys.stderr)
+
+
+if __name__ == '__main__':
+    main()

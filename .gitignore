@@ -1,0 +1,11 @@
+# Secretos
+.env
+
+# Estado persistente del contenedor
+data/home
+
+# Build
+*.log
+
+# Ficheros MacOS
+*.DS_Store
