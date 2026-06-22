@@ -29,6 +29,18 @@ for skill_dir in /config/skills/*/; do
     [ ! -d "$HOME/.claude/skills/$name" ] && cp -r "$skill_dir" "$HOME/.claude/skills/$name"
 done
 
+# ── Auto-clone de app/ si existe .app-repo y la carpeta no existe aun ────────
+for project_dir in /work/*/; do
+    [ -d "$project_dir" ] || continue
+    app_repo_file="${project_dir%/}/.app-repo"
+    app_dir="${project_dir%/}/app"
+    if [ -f "$app_repo_file" ] && [ ! -d "$app_dir" ]; then
+        repo_url=$(cat "$app_repo_file")
+        echo "  -> Clonando app: $(basename $project_dir) <- $repo_url"
+        git clone "$repo_url" "$app_dir" 2>/dev/null || echo "  !! Error clonando $repo_url"
+    fi
+done
+
 # ── Memoria persistente: symlinks .claude/projects -> /work/<proyecto>/memory/ ──
 # Permite sincronizar memoria entre maquinas via git (memory/ vive en el repo del proyecto)
 for project_dir in /work/*/; do

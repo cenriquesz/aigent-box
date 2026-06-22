@@ -4,6 +4,9 @@
 # Estado persistente del contenedor
 data/home
 
+# App repos dentro de los proyectos (tienen su propio repo git)
+data/work/*/app/
+
 # Build
 *.log
 
