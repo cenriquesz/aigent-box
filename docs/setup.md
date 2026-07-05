@@ -39,7 +39,7 @@ make build
 | Variable | Default | Comando |
 |---|---|---|
 | `ROLE_CHAT` | `claude-haiku-4-5-20251001` | `make chat` |
-| `ROLE_RUN` | `claude-sonnet-4-6` | `make run` |
+| `ROLE_RUN` | `claude-sonnet-5` | `make run` |
 | `ROLE_ORCH` | `claude-opus-4-8` | `make orch` |
 
 **Modelos de sub-agentes (usados internamente por el orquestador):**
@@ -49,20 +49,20 @@ Track de desarrollo:
 | Variable | Default | Rol |
 |---|---|---|
 | `ROLE_SCOUT` | `claude-haiku-4-5-20251001` | Explora código existente |
-| `ROLE_ARCHITECT` | `claude-sonnet-4-6` | Diseña la solución |
-| `ROLE_IMPLEMENTER` | `claude-sonnet-4-6` | Escribe código |
-| `ROLE_TESTER` | `claude-sonnet-4-6` | Crea suites de test |
-| `ROLE_REVIEWER` | `claude-sonnet-4-6` | Ejecuta tests y valida |
-| `ROLE_FIXER` | `claude-sonnet-4-6` | Corrige lo rechazado por el reviewer |
+| `ROLE_ARCHITECT` | `claude-sonnet-5` | Diseña la solución |
+| `ROLE_IMPLEMENTER` | `claude-sonnet-5` | Escribe código |
+| `ROLE_TESTER` | `claude-sonnet-5` | Crea suites de test |
+| `ROLE_REVIEWER` | `claude-sonnet-5` | Ejecuta tests y valida |
+| `ROLE_FIXER` | `claude-sonnet-5` | Corrige lo rechazado por el reviewer |
 
 Tracks adicionales:
 
 | Variable | Default | Rol |
 |---|---|---|
-| `ROLE_DOCUMENTER` | `claude-sonnet-4-6` | Documentación técnica |
-| `ROLE_ANALYST` | `claude-sonnet-4-6` | Análisis de datos |
+| `ROLE_DOCUMENTER` | `claude-sonnet-5` | Documentación técnica |
+| `ROLE_ANALYST` | `claude-sonnet-5` | Análisis de datos |
 | `ROLE_REPORTER` | `claude-haiku-4-5-20251001` | Documentos para personas |
-| `ROLE_INFRA` | `claude-sonnet-4-6` | Infraestructura (K8s, AWS, Docker) |
+| `ROLE_INFRA` | `claude-sonnet-5` | Infraestructura (K8s, AWS, Docker) |
 
 ## Primer arranque - Login OAuth
 

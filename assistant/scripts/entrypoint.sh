@@ -85,7 +85,7 @@ echo "╔═══════════════════════�
 echo "║        Claude Code Assistant         ║"
 echo "╚══════════════════════════════════════╝"
 echo ""
-echo "  Modelo : ${CLAUDE_MODEL:-claude-sonnet-4-6}"
+echo "  Modelo : ${CLAUDE_MODEL:-claude-sonnet-5}"
 echo "  Work   : /work"
 echo "  Docker : $(docker --version 2>/dev/null | cut -d' ' -f3 | tr -d ',')"
 echo "  AWS    : ${AWS_PROFILE:-default}"
@@ -144,7 +144,7 @@ if [ -n "$PROJECT" ] && [ -f "$PROJECT_DIR/agent.md" ] && grep -q '\[Nombre del 
 fi
 
 if [ -n "$INITIAL_PROMPT" ]; then
-    exec claude --dangerously-skip-permissions --model "${CLAUDE_MODEL:-claude-sonnet-4-6}" "$INITIAL_PROMPT"
+    exec claude --dangerously-skip-permissions --model "${CLAUDE_MODEL:-claude-sonnet-5}" "$INITIAL_PROMPT"
 else
-    exec claude --dangerously-skip-permissions --model "${CLAUDE_MODEL:-claude-sonnet-4-6}"
+    exec claude --dangerously-skip-permissions --model "${CLAUDE_MODEL:-claude-sonnet-5}"
 fi
