@@ -31,7 +31,6 @@ make build
 |---|---|---|
 | `ANTHROPIC_API_KEY` | No | API key. Si se omite, Claude usará OAuth |
 | `AWS_PROFILE` | No | Perfil de AWS a usar. Default: `default` |
-| `BRAVE_API_KEY` | No | Para el MCP de búsqueda web |
 | `GITHUB_TOKEN` | No | Para el MCP de GitHub |
 
 **Modelos por comando (configurables sin tocar el Makefile):**

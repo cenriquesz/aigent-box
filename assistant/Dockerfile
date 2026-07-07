@@ -97,8 +97,7 @@ RUN npm install -g @anthropic-ai/claude-code@2.1.162 repomix
 
 # MCP Servers npm - pre-instalados para no descargar en runtime
 RUN npm install -g \
-    @modelcontextprotocol/server-filesystem \
-    @modelcontextprotocol/server-brave-search
+    @modelcontextprotocol/server-filesystem
 
 # GitHub MCP oficial - binario Go, multi-arch
 RUN ARCH=$(dpkg --print-architecture) && \

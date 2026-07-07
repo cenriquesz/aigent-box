@@ -29,7 +29,6 @@ Los MCPs son plugins que Claude usa como herramientas nativas durante la sesión
 | MCP | Función | Requiere |
 |---|---|---|
 | `filesystem` | Acceso avanzado a ficheros en `/work` | - |
-| `brave-search` | Búsqueda en internet | `BRAVE_API_KEY` en `.env` |
 | `github` | Gestión de repositorios | `GITHUB_TOKEN` en `.env` |
 | `playwright` | Navegación web con stealth anti-detección | - |
 
