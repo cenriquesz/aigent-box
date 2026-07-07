@@ -3,41 +3,5 @@
   "theme": "dark",
   "trustedDirectories": [
     "/work"
-  ],
-  "mcpServers": {
-    "filesystem": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/work",
-        "/home/assistant/.claude"
-      ]
-    },
-    "brave-search": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-brave-search"
-      ],
-      "env": {
-        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
-      }
-    },
-    "github": {
-      "command": "github-mcp-server",
-      "args": [
-        "stdio"
-      ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
-      }
-    },
-    "playwright": {
-      "command": "npx",
-      "args": [
-        "@prakhar1/playwright-stealth-mcp"
-      ]
-    }
-  }
+  ]
 }

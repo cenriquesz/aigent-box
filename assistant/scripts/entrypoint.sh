@@ -12,6 +12,17 @@ mkdir -p $HOME/.claude/commands $HOME/.claude/skills
 if [ ! -f $HOME/.claude/settings.json ]; then
     cp /config/settings.json $HOME/.claude/settings.json
 fi
+
+# MCP servers: se registran en ~/.claude.json (scope user), no en settings.json
+# (settings.json no es leido por Claude Code para lanzar servidores MCP)
+CLAUDE_JSON="$HOME/.claude.json"
+if [ ! -f "$CLAUDE_JSON" ]; then
+    echo '{}' > "$CLAUDE_JSON"
+fi
+if [ "$(jq 'has("mcpServers")' "$CLAUDE_JSON")" != "true" ]; then
+    jq -s '.[0].mcpServers = .[1] | .[0]' "$CLAUDE_JSON" /config/mcp-servers.json > "$CLAUDE_JSON.tmp" \
+        && mv "$CLAUDE_JSON.tmp" "$CLAUDE_JSON"
+fi
 # CLAUDE.md y agent.md son managed: siempre se actualizan desde config
 cp /config/CLAUDE.md $HOME/.claude/CLAUDE.md
 cp /config/agent.md $HOME/.claude/agent.md
@@ -128,10 +139,6 @@ else
 fi
 
 # Pre-confiar en el directorio del proyecto para evitar el diálogo de confianza
-CLAUDE_JSON="$HOME/.claude.json"
-if [ ! -f "$CLAUDE_JSON" ]; then
-    echo '{}' > "$CLAUDE_JSON"
-fi
 jq --arg p "$PROJECT_DIR" '.projects[$p].hasTrustDialogAccepted = true' "$CLAUDE_JSON" > "$CLAUDE_JSON.tmp" \
     && mv "$CLAUDE_JSON.tmp" "$CLAUDE_JSON"
 
