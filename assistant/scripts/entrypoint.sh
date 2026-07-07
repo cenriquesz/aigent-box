@@ -19,10 +19,25 @@ CLAUDE_JSON="$HOME/.claude.json"
 if [ ! -f "$CLAUDE_JSON" ]; then
     echo '{}' > "$CLAUDE_JSON"
 fi
-if [ "$(jq 'has("mcpServers")' "$CLAUDE_JSON")" != "true" ]; then
-    jq -s '.[0].mcpServers = .[1] | .[0]' "$CLAUDE_JSON" /config/mcp-servers.json > "$CLAUDE_JSON.tmp" \
-        && mv "$CLAUDE_JSON.tmp" "$CLAUDE_JSON"
-fi
+
+# Merge de mcpServers en cada arranque: los servidores managed (los definidos en
+# mcp-servers.json) se anaden/actualizan/eliminan segun la config actual. Los que
+# el usuario haya anadido por su cuenta (claude mcp add, edicion manual...) nunca
+# se tocan, porque no aparecen en el snapshot "managed" de la vez anterior.
+MCP_MANAGED_SNAPSHOT="$HOME/.claude/.mcp-managed.json"
+[ -f "$MCP_MANAGED_SNAPSHOT" ] || echo '{}' > "$MCP_MANAGED_SNAPSHOT"
+
+jq -s '
+    (.[0].mcpServers // {}) as $current
+    | .[1] as $old
+    | .[2] as $new
+    | ($current | with_entries(select($old[.key] == null))) as $user_defined
+    | .[0].mcpServers = ($user_defined + $new)
+    | .[0]
+' "$CLAUDE_JSON" "$MCP_MANAGED_SNAPSHOT" /config/mcp-servers.json > "$CLAUDE_JSON.tmp" \
+    && mv "$CLAUDE_JSON.tmp" "$CLAUDE_JSON"
+
+cp /config/mcp-servers.json "$MCP_MANAGED_SNAPSHOT"
 # CLAUDE.md y agent.md son managed: siempre se actualizan desde config
 cp /config/CLAUDE.md $HOME/.claude/CLAUDE.md
 cp /config/agent.md $HOME/.claude/agent.md
